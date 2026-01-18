@@ -10,12 +10,12 @@ const LikertScaleButtons: React.FC<{
 }> = ({ options, selectedValue, onSelect }) => {
   const labels = ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'];
   return (
-    <div className="flex justify-center items-start space-x-2 md:space-x-3">
+    <div className="flex justify-between items-start w-full max-w-md mx-auto">
       {options.map((option, index) => (
-        <div key={option} className="text-center">
+        <div key={option} className="flex flex-col items-center flex-1">
           <button
             onClick={() => onSelect(option)}
-            className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-base md:text-lg font-semibold transition-all duration-200 border-2 ${
+            className={`w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-sm md:text-lg font-semibold transition-all duration-200 border-2 ${
               selectedValue === option
                 ? 'bg-brand-pink text-white border-brand-pink scale-110'
                 : 'bg-white text-brand-text-light border-gray-300 hover:border-brand-pink'
@@ -23,7 +23,9 @@ const LikertScaleButtons: React.FC<{
           >
             {index + 1}
           </button>
-          <span className="text-xs text-gray-500 mt-2 block w-24">{labels[index]}</span>
+          <span className="text-[10px] md:text-xs text-gray-500 mt-2 text-center leading-tight px-0.5">
+            {labels[index]}
+          </span>
         </div>
       ))}
     </div>
@@ -77,40 +79,40 @@ const QuestionnaireScreen: React.FC<{ onComplete: (answers: Answer[]) => void }>
   const nextCategoryName = currentCategoryIndex < CATEGORIES.length - 1 ? CATEGORY_DETAILS[CATEGORIES[currentCategoryIndex + 1]].title : '';
 
   return (
-    <div className="bg-white p-4 sm:p-6 md:p-8 rounded-2xl w-full max-w-3xl mx-auto animate-fade-in shadow-lg">
+    <div className="bg-white p-5 md:p-8 rounded-2xl w-full max-w-3xl mx-auto animate-fade-in shadow-lg border border-gray-100">
         {/* Progress Bar */}
-        <div className="mb-8">
+        <div className="mb-6 md:mb-8">
             <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-semibold text-brand-text">Progress</span>
-                <span className="text-sm font-semibold text-brand-pink">{progress}%</span>
+                <span className="text-xs md:text-sm font-semibold text-brand-text uppercase tracking-wider">Progress</span>
+                <span className="text-xs md:text-sm font-semibold text-brand-pink">{progress}%</span>
             </div>
-            <div className="w-full bg-brand-accent rounded-full h-2.5">
-                <div className="bg-brand-pink h-2.5 rounded-full" style={{ width: `${progress}%`, transition: 'width 0.5s ease-in-out' }}></div>
+            <div className="w-full bg-brand-accent rounded-full h-2 md:h-2.5">
+                <div className="bg-brand-pink h-2 md:h-2.5 rounded-full" style={{ width: `${progress}%`, transition: 'width 0.5s ease-in-out' }}></div>
             </div>
         </div>
 
         {/* Category Header */}
-        <div className="text-center mb-12">
-            <h1 className="text-3xl md:text-4xl font-serif text-brand-text mb-2">
+        <div className="text-center mb-8 md:mb-12">
+            <h1 className="text-2xl md:text-4xl font-serif text-brand-text mb-2 leading-tight">
                 {categoryDetails.title}
             </h1>
-            <p className="text-md text-brand-text-light max-w-xl mx-auto">{categoryDetails.description}</p>
+            <p className="text-sm md:text-md text-brand-text-light max-w-xl mx-auto italic">{categoryDetails.description}</p>
         </div>
 
         {/* Questions List */}
-        <div className="space-y-12">
+        <div className="space-y-10 md:space-y-12">
           {questionsForCategory.map((question) => {
             const questionIndex = questionMap.get(question.text)!;
             return (
               <div key={question.text} className="text-center animate-fade-in">
-                <h2 className="text-lg md:text-xl font-medium text-brand-text mb-6 max-w-2xl mx-auto">
+                <h2 className="text-base md:text-xl font-medium text-brand-text mb-5 md:mb-6 max-w-2xl mx-auto leading-relaxed">
                   {question.text}
                 </h2>
                 {question.type === QuestionType.Scale && (
-                  <div className="flex justify-center flex-wrap gap-2">
+                  <div className="flex justify-center flex-wrap gap-2 max-w-sm mx-auto">
                     {Array.from({ length: 10 }, (_, i) => i + 1).map(num => (
                         <button key={num} onClick={() => handleAnswer(questionIndex, num)} 
-                            className={`w-10 h-10 rounded-full flex items-center justify-center text-base font-semibold transition-colors border-2 ${answers[questionIndex] === num ? 'bg-brand-pink text-white border-brand-pink scale-110' : 'bg-white border-gray-300 hover:border-brand-pink'}`}>
+                            className={`w-9 h-9 md:w-11 md:h-11 rounded-full flex items-center justify-center text-sm md:text-base font-semibold transition-all border-2 ${answers[questionIndex] === num ? 'bg-brand-pink text-white border-brand-pink scale-110 shadow-md' : 'bg-white border-gray-200 hover:border-brand-pink'}`}>
                             {num}
                         </button>
                     ))}
@@ -129,19 +131,19 @@ const QuestionnaireScreen: React.FC<{ onComplete: (answers: Answer[]) => void }>
         </div>
 
         {/* Navigation */}
-        <div className="mt-12 pt-8 border-t border-gray-200 flex flex-col items-center gap-4">
+        <div className="mt-10 md:mt-12 pt-6 md:pt-8 border-t border-gray-100 flex flex-col items-center gap-4">
             <button 
               onClick={handleNext} 
               disabled={!areAllQuestionsAnswered} 
-              className="w-full max-w-sm bg-brand-pink text-white py-4 px-8 rounded-lg text-lg font-semibold hover:opacity-90 transition-colors shadow-md disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="w-full max-w-sm bg-brand-pink text-white py-3.5 md:py-4 px-8 rounded-lg text-base md:text-lg font-semibold hover:opacity-90 transition-colors shadow-md active:scale-95 disabled:bg-gray-300 disabled:cursor-not-allowed disabled:shadow-none"
             >
               {currentCategoryIndex === CATEGORIES.length - 1 
-                ? 'Complete Assessment' 
-                : `Next: ${nextCategoryName}`}
+                ? 'Finish Assessment' 
+                : `Next Category`}
             </button>
             {currentCategoryIndex > 0 && (
-              <button onClick={handlePrevious} className="text-brand-text-light font-semibold hover:text-brand-primary">
-                &larr; Previous: {CATEGORY_DETAILS[CATEGORIES[currentCategoryIndex - 1]].title}
+              <button onClick={handlePrevious} className="text-sm md:text-base text-brand-text-light font-medium hover:text-brand-primary transition-colors py-2">
+                &larr; Back to {CATEGORY_DETAILS[CATEGORIES[currentCategoryIndex - 1]].title}
               </button>
             )}
         </div>

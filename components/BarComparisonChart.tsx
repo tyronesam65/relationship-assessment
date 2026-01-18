@@ -48,6 +48,7 @@ const BarComparisonChart: React.FC<BarComparisonChartProps> = ({ data, partner1N
           stepSize: 1,
           font: {
             family: 'Inter, sans-serif',
+            size: 10,
           },
         },
       },
@@ -58,7 +59,7 @@ const BarComparisonChart: React.FC<BarComparisonChartProps> = ({ data, partner1N
         ticks: {
           font: {
             family: 'Inter, sans-serif',
-            size: 11,
+            size: 10,
           },
           color: '#333333',
         },
@@ -68,32 +69,33 @@ const BarComparisonChart: React.FC<BarComparisonChartProps> = ({ data, partner1N
       legend: {
         position: 'top' as const,
         labels: {
-          boxWidth: 12,
+          boxWidth: 10,
           usePointStyle: true,
           pointStyle: 'circle',
           font: {
             family: 'Inter, sans-serif',
+            size: 11,
             weight: '600' as const,
           },
         },
       },
       tooltip: {
         backgroundColor: '#333333',
-        padding: 12,
+        padding: 10,
         titleFont: {
           family: 'Inter, sans-serif',
-          size: 14,
+          size: 12,
         },
         bodyFont: {
           family: 'Inter, sans-serif',
-          size: 13,
+          size: 11,
         },
       },
     },
   };
 
   return (
-    <div className="w-full h-[600px]">
+    <div className="w-full h-[450px] md:h-[600px]">
       <Bar data={chartData} options={options} />
     </div>
   );

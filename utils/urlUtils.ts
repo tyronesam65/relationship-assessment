@@ -1,11 +1,47 @@
 
 /**
+ * Compression maps for shorter URLs
+ */
+const LIKERT_MAP: Record<string, string> = {
+  'Strongly Disagree': '1',
+  'Disagree': '2',
+  'Neutral': '3',
+  'Agree': '4',
+  'Strongly Agree': '5',
+};
+
+const REVERSE_LIKERT: Record<string, string> = {
+  '1': 'Strongly Disagree', '2': 'Disagree', '3': 'Neutral', '4': 'Agree', '5': 'Strongly Agree'
+};
+
+/**
+ * Packs a list of mixed answers into a compact string
+ */
+export const packAnswers = (answers: (number | string | null)[]): string => {
+  return answers.map(a => {
+    if (a === null) return '0';
+    if (typeof a === 'number') return String.fromCharCode(96 + a); // 1-10 -> a-j
+    return LIKERT_MAP[a as string] || '0';
+  }).join('');
+};
+
+/**
+ * Unpacks a compact string back into a list of answers
+ */
+export const unpackAnswers = (str: string): (number | string | null)[] => {
+  return str.split('').map(c => {
+    if (c === '0') return null;
+    if (c >= 'a' && c <= 'j') return c.charCodeAt(0) - 96;
+    return REVERSE_LIKERT[c] || null;
+  });
+};
+
+/**
  * Unicode-safe Base64 encoding
  */
 export const encodeData = (data: any): string => {
   try {
     const jsonString = JSON.stringify(data);
-    // Use TextEncoder to handle Unicode characters correctly
     const bytes = new TextEncoder().encode(jsonString);
     let binary = '';
     const len = bytes.byteLength;
@@ -42,15 +78,9 @@ export const decodeData = (base64: string): any => {
  */
 export const getSharableBaseUrl = (): string => {
   let url = window.location.href.split('?')[0].split('#')[0];
-  
-  // Handle blob URLs which are common in some preview environments
-  // blob:https://example.com/uuid -> https://example.com/
   if (url.startsWith('blob:')) {
     url = url.replace('blob:', '');
-    // If it ends with a UUID-like path after stripping blob, 
-    // it might still be un-sharable, but this is our best shot.
   }
-  
   return url;
 };
 

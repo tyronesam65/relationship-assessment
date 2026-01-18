@@ -6,7 +6,7 @@ import NameEntryScreen from './components/NameEntryScreen';
 import InvitationScreen from './components/InvitationScreen';
 import QuestionnaireScreen from './components/QuestionnaireScreen';
 import ReportScreen from './components/ReportScreen';
-import { decodeData } from './utils/urlUtils';
+import { decodeData, unpackAnswers } from './utils/urlUtils';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.Welcome);
@@ -27,17 +27,18 @@ export default function App() {
       if (reportDataStr) {
         const decoded = decodeData(reportDataStr);
         if (decoded) {
-          setPartner1Name(decoded.p1n);
-          setPartner1Answers(decoded.p1a);
-          setPartner2Name(decoded.p2n);
-          setPartner2Answers(decoded.p2a);
+          // Handle both legacy and new compressed formats
+          setPartner1Name(decoded.p1n || decoded.partner1Name);
+          setPartner1Answers(decoded.p1a ? unpackAnswers(decoded.p1a) : decoded.partner1Answers);
+          setPartner2Name(decoded.p2n || decoded.partner2Name);
+          setPartner2Answers(decoded.p2a ? unpackAnswers(decoded.p2a) : decoded.partner2Answers);
           setCurrentScreen(Screen.Report);
         }
       } else if (inviteDataStr) {
         const decoded = decodeData(inviteDataStr);
         if (decoded) {
-          setPartner1Name(decoded.p1n);
-          setPartner1Answers(decoded.p1a);
+          setPartner1Name(decoded.p1n || decoded.partner1Name);
+          setPartner1Answers(decoded.p1a ? unpackAnswers(decoded.p1a) : decoded.partner1Answers);
           setIsPartner2Flow(true);
           setCurrentScreen(Screen.Welcome);
         }
