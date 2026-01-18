@@ -7,9 +7,10 @@ interface BarComparisonChartProps {
   data: CategoryScore[];
   partner1Name: string;
   partner2Name: string;
+  isPrinting?: boolean;
 }
 
-const BarComparisonChart: React.FC<BarComparisonChartProps> = ({ data, partner1Name, partner2Name }) => {
+const BarComparisonChart: React.FC<BarComparisonChartProps> = ({ data, partner1Name, partner2Name, isPrinting = false }) => {
   const chartData = {
     labels: data.map(d => d.category),
     datasets: [
@@ -36,6 +37,7 @@ const BarComparisonChart: React.FC<BarComparisonChartProps> = ({ data, partner1N
     indexAxis: 'y' as const,
     responsive: true,
     maintainAspectRatio: false,
+    animation: isPrinting ? (false as const) : { duration: 1000 },
     scales: {
       x: {
         beginAtZero: true,

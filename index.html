@@ -38,6 +38,32 @@
         },
       }
     </script>
+    <style>
+      @media print {
+        body { background: white !important; }
+        .no-print { display: none !important; }
+        .report-container { 
+          box-shadow: none !important; 
+          border: none !important; 
+          padding: 0 !important;
+          width: 100% !important;
+          background: white !important;
+        }
+      }
+
+      /* PDF specific layout optimizations */
+      .pdf-export-active {
+        width: 1000px !important; /* Fixed width during capture for desktop layout */
+        background: white !important;
+      }
+      
+      .pdf-export-active * {
+        animation: none !important;
+        transition: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+      }
+    </style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
